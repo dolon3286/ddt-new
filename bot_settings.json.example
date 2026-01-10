@@ -1,0 +1,10 @@
+{
+  "admin_ids": [],
+  "allowed_users": [],
+  "drive_folder_id": "",
+  "max_tasks": 2,
+  "download_command": "go run main.go",
+  "download_dirs": [],
+  "auto_select_all": true,
+  "auto_skip_mv": true
+}

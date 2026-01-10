@@ -1341,7 +1341,7 @@ func ripAlbum(albumId string, token string, storefront string, mediaUserToken st
 	os.MkdirAll(albumFolderPath, os.ModePerm)
 	album.SaveName = albumFolderName
 	fmt.Println(albumFolderName)
-	if Config.SaveArtistCover && len(meta.Data[0].Relationships.Artists.Data) > 0{
+	if Config.SaveArtistCover && len(meta.Data[0].Relationships.Artists.Data) > 0 {
 		if meta.Data[0].Relationships.Artists.Data[0].Attributes.Artwork.Url != "" {
 			_, err = writeCover(singerFolder, "folder", meta.Data[0].Relationships.Artists.Data[0].Attributes.Artwork.Url)
 			if err != nil {
@@ -1863,11 +1863,15 @@ func main() {
 			fmt.Println("Failed to get artist albums.")
 			return
 		}
-		mvArgs, err := checkArtist(os.Args[0], token, "music-videos")
-		if err != nil {
-			fmt.Println("Failed to get artist music-videos.")
+		if Config.MVMax > 0 {
+			mvArgs, err := checkArtist(os.Args[0], token, "music-videos")
+			if err != nil {
+				fmt.Println("Failed to get artist music-videos.")
+			}
+			os.Args = append(albumArgs, mvArgs...)
+		} else {
+			os.Args = albumArgs
 		}
-		os.Args = append(albumArgs, mvArgs...)
 	}
 	albumTotal := len(os.Args)
 	for {
@@ -1881,6 +1885,11 @@ func main() {
 					continue
 				}
 				counter.Total++
+				if Config.MVMax <= 0 {
+					fmt.Println(": mv-max is 0, skip MV dl")
+					counter.Success++
+					continue
+				}
 				if len(Config.MediaUserToken) <= 50 {
 					fmt.Println(": meida-user-token is not set, skip MV dl")
 					counter.Success++
