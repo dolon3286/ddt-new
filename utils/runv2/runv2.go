@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"syscall"
 	"time"
 
 	"github.com/itouakirai/mp4ff/mp4"
@@ -153,7 +154,10 @@ func Run(adamId string, playlistUrl string, outfile string, Config structs.Confi
 	addr := Config.DecryptM3u8Port
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
-		return err
+		if errors.Is(err, syscall.ECONNREFUSED) {
+			return fmt.Errorf("failed to connect to decryptor at %s (connection refused; ensure wrapper/decrypt service is running and listening on this address; check config decrypt-m3u8-port): %w", addr, err)
+		}
+		return fmt.Errorf("failed to connect to decryptor at %s (check wrapper/decrypt service and config decrypt-m3u8-port): %w", addr, err)
 	}
 	//fmt.Print("Decrypting...\n")
 	defer Close(conn)

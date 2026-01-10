@@ -1,6 +1,6 @@
 module main
 
-go 1.23.1
+go 1.22
 
 require (
 	github.com/aead/cmac v0.0.0-20160719120800-7af84192f0b1

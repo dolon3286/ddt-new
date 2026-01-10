@@ -7,3 +7,6 @@
 !main.go
 !README.md
 !utils/*
+!bot.py
+!requirements.txt
+!bot_settings.json.example
