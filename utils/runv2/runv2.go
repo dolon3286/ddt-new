@@ -153,7 +153,7 @@ func Run(adamId string, playlistUrl string, outfile string, Config structs.Confi
 	addr := Config.DecryptM3u8Port
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to connect to decryptor at %s (check wrapper/decrypt service and config decrypt-m3u8-port): %w", addr, err)
 	}
 	//fmt.Print("Decrypting...\n")
 	defer Close(conn)
@@ -685,3 +685,4 @@ func DecryptFragment(frag *mp4.Fragment, tracks map[uint32]mp4.DecryptTrackInfo,
 
 	return nil
 }
+

@@ -77,6 +77,48 @@ docker run --network host -v ./downloads:/downloads -v ./config.yaml:/app/config
 
 [Chinese tutorial - see Method 3 for details](https://telegra.ph/Apple-Music-Alac高解析度无损音乐下载教程-04-02-2)
 
+## Telegram bot setup (VPS)
+
+The repository includes a Telegram bot (`bot.py`) that can run downloads and upload the results to Google Drive using your existing `token.pickle`.
+
+### Requirements
+1. Python 3.10+
+2. A valid `token.pickle` file for Google Drive (place it in the repo or set `GDRIVE_TOKEN`).
+3. A Telegram bot token (set `BOT_TOKEN` or edit `BOT_TOKEN` in `bot.py`).
+
+### Install
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Configure
+1. Copy `bot_settings.json.example` to `bot_settings.json`.
+2. Start the bot and run `/start` once to register yourself as the first admin.
+3. Use `/uset` to configure:
+   - Drive folder ID
+   - Max concurrent tasks
+   - Allowed users
+
+Optional environment variables:
+- `BOT_TOKEN`: Telegram bot token.
+- `BOT_SETTINGS_PATH`: custom settings path (defaults to `bot_settings.json`).
+- `BOT_DOWNLOAD_CMD`: downloader command (defaults to `go run main.go`).
+- `GDRIVE_TOKEN`: path to `token.pickle`.
+
+### Run
+```bash
+python3 bot.py
+```
+
+### Commands
+- `/dl <link>`: download and upload to Google Drive.
+- `/uset`: interactive settings menu (admin only).
+- `/adduser <user_id>` and `/removeuser <user_id>`: manage allowed users (admin only).
+- `/setdrive <folder_id>`: set Google Drive folder ID (admin only).
+- `/setmaxtasks <num>`: set concurrent tasks (admin only).
+
 ## Downloading lyrics
 
 1. Open [Apple Music](https://music.apple.com) and log in
